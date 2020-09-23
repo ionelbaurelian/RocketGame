@@ -1,11 +1,3 @@
-/******************************************************************************
-
-                            Online C Compiler.
-                Code, Compile, Run and Debug C program online.
-Write your code in this editor and press "Run" button to compile and execute it.
-
-*******************************************************************************/
-//Bitmalai Ionel-Aurelian 334AB
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -52,61 +44,17 @@ coordinates obstacles[SCENARIO_CONFIG_NUMBER][4] = { { {1,1}, {5,0}, { 9,1}, {13
 /* Configuratiile posibile de reward-uri in cadrul jocului */
 coordinates rewards[SCENARIO_CONFIG_NUMBER] = { {14, 1}, {15, 0}, {13, 1}, {14, 0}, {12, 0} };
 
-/* Function prototypes - A NU SE MODIFICA */
+
 void Delay( uint32_t nTime );
 char getch( void );
-/** lcd16x2_gotoxy - Pozitioneaza cursorul la pozitia x, y pe LCD-ul 16x2 emulat, 
-  * unde x - nr coloanei (0-15) si y - nr liniei (0-1)  
-  */
 void lcd16x2_gotoxy(unsigned int x, unsigned int y);
-/** lcd16x2_puts - Pune sirul de caractere dat ca parametru la pozitia x, y specificata anterior; 
-  * Daca sirul are lungimea mai mare decat numarul de casute ramase pe randul LCD-ului, aceste
-  * caractere vor fi ignorate
-  */
 void lcd16x2_puts(char *s);
-/** check_keyboard_pressed - Verifica daca a fost apasata o tasta si apeleaza functia 
-  * verificare_tasta_apasata pentru a genera handler-ul corespunzator comenzii 
-  * in cazul in care tasta apasata este W sau S
-  */
 void check_keyboard_pressed( void );
 void generate_scenario( void );
-
-/** TODO: HANDLERE si functii pentru apasarea de butoane 
-  * Control RAND: Tasta W
-  * Control INAINTARE: Tasta S 
-  */
 uint8_t verificare_tasta_apasata( char c );
-/*{
-    return COMANDA_SCHIMBARE_RAND/ COMANDA_INAINTARE
-      
-    Exemplu implementare 
-    return COMANDA_SCHIMBARE_RAND;
-    Sfarsit exemplu implementare 
-}*/
-
 void handler_schimbare_rand( );
-/*{
-    /** TODO: De adaugat functionalitate pentru ca racheta => 
-      * sa se deplaseze pe randul de sus sau de jos 
-      */
-      
-    /* Exemplu implementare
-    printf("S-a apasat o tasta - Racheta trebuie sa se mute!!\r\n");
-    Delay(1000);
-    Sfarsit exemplu implementare 
-}*/
-
 void handler_inaintare ( );
-/*{
-    /** TODO: De adaugat functionalitate pentru ca racheta =>
-      * sa se deplaseze o casuta inainte
-      */
-      
-    /* Exemplu implementare 
-    printf("S-a apasat o tasta - Racheta trebuie sa se mute!!\r\n");
-    Delay(1000);
-    Sfarsit exemplu implementare 
-}*/
+
 int main()
 {
     int i, pid, c=0;
@@ -116,16 +64,6 @@ int main()
     printf("Introdu un punctaj maxim: \r\n");
     scanf("%d", &max_score);
     printf( "\nYou entered: %d ", max_score);
-    /* TODO: Citirea unui punctaj maxim la care jocul este castigat */
-
-    /** Functionalitatile de intreruperi asociate evenimentelor externe, cum ar fi apasarea de butoane,
-      * asa cum au fost prezentate in laborator, sunt specifice microcontrolerelor/ microprocesoarelor,
-      * ceea ce inseamna ca sunt dependente de tipul de procesor (low level) si de sistemul de operare
-      * (high level). Cum intreruperile pot fi considerate entitati care nu fac altceva decat sa supervizeze
-      * evenimetele, in cadrul acestui program intreruperile vor fi emulate prin crearea unui nou proces 
-      * copil din procesul de baza care doar sa verifice apasarea de taste si sa trimita semnale catre 
-      * procesul principal 
-      */
     pid = fork();
     
     if( pid != 0 ) // Proces parinte - programul de baza care primeste apasarile corecte si emuleaza un LCD
@@ -133,7 +71,7 @@ int main()
         srand((unsigned) time(&t));
         memset ( rows, ' ', 32 );
  
-        /* Definerea handler-urilor pentru apĆ„Āsarea butoanelor W si S */
+        /* Definerea handler-urilor pentru apasarea butoanelor W si S */
         signal(SIGUSR1, handler_schimbare_rand);
         signal(SIGUSR2, handler_inaintare);
         
@@ -154,15 +92,6 @@ int main()
             lcd16x2_puts("*");
             
             
-            /** TODO: verifica daca a fost apasata vreo tasta relevanta
-              * Daca nu a fost, racheta inainteaza automat o casuta 
-              * Daca a fost apasata, se va face doar mutarea ceruta de la tastaura
-              * !!! Pe ecran trebuie sa apasa o singura racheta!!!
-              */
-            
-            /** TODO: Verifica daca racheta a atins vreun obstacol
-              * Daca a atins, jocul este pierdut automat
-              */
         
         for (i = 0; i < 4; i++)
         {
@@ -177,11 +106,7 @@ int main()
         }
               
             
-            /** TODO: verifica daca racheta a luat vreun punct (*)
-              * Jocul se termina si este castigat atunci cand se obtine scorul maxim 
-              * Dupa ce este obtinut punctul de pe nivelul curent, trebuie sa se genereze 
-              * o alta configuratie de obstacole pana cand este atins scorul maxim
-              */
+
     if ((r_x==rewards[scenario_nb].x||r_x+1== rewards[scenario_nb].x) && r_y==rewards[scenario_nb].y) 
     {
         score++;
@@ -219,7 +144,7 @@ int main()
         printf("FINAL DE JOC, racheta a adunat %d puncte\r\n", max_score);
         
     }
-    else { // Proces copil - A NU SE MODIFICA
+    else { 
         check_keyboard_pressed( );
     }
    
